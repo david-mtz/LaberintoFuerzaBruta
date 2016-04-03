@@ -19,6 +19,7 @@ void arrPush(pilaD* arrD, coord equisye) {
 }
 
 // Eliminar el ultimo elemento.
+
 void arrPop(pilaD* arrD) {
     arrD->elementos = realloc(arrD->elementos, (arrD->nElementos - 1) * sizeof (coord));
     arrD->nElementos--;
@@ -31,6 +32,29 @@ void arrFree(pilaD* arrD) {
     arrD->nElementos = 0;
 }
 /* Fin arreglo dinamico */
+
+/* Escritura de Archivo Solucion */
+void generarArc() {
+    FILE *arcS;
+    arcS = fopen(archivoSol, "w+"); // Crear & Eliminar contenido.
+    fclose(arcS);
+}
+
+void aniadirArc(pilaD* solucion) {
+    FILE *arcS;
+    int i;
+    arcS = fopen(archivoSol, "a+"); // Añadir contenido.
+    for (i = 0; i < solucion->nElementos; i++) {
+        if (i == solucion->nElementos - 1)
+            fprintf(arcS, "%i %i\n", solucion->elementos[i].columna, solucion->elementos[i].renglon);
+        else
+            fprintf(arcS, "%i %i, ", solucion->elementos[i].columna, solucion->elementos[i].renglon);
+
+    }
+    fclose(arcS);
+}
+/* Fin de Escritura de Archivo Solucion */
+
 
 /* Laberinto */
 
@@ -200,9 +224,28 @@ int buscarCelda(pilaD* visitada, coord celdaActual) {
     // Return 1 = Ya visitada(se encontro registro) - 0 = NO Visitada (no esta registrada) 
 }
 
+// Funcion que simula el proceso de paso a paso.
+void simularPaso(laberinto nuevoL, pilaD* resolucion) {
+    int i, j;
+    for (i = 0; i < nuevoL.renglones; i++) {
+        for (j = 0; j < nuevoL.columnas; j++) {
+            coord paso;
+            paso.renglon = i;
+            paso.columna = j;
+            if (nuevoL.camino[i][j] == 0) {
+                if (buscarCelda(resolucion, paso) == 1)
+                    printf("#");
+                else
+                    printf(".");
+            } else
+                printf("%c", 177);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
 // Metodo Backtracking.
-// int pasos, si es = 1 es para llamar a la funcion que simulara los pasos
-// falta implementar paso a paso
 void resolverL(laberinto nuevoL, int pasos) {
     int i;
     pilaD resolucion; // Pila que almacena la solucion de los caminos.
@@ -211,6 +254,7 @@ void resolverL(laberinto nuevoL, int pasos) {
     resolucion = arregloDin();
     visitadas = arregloDin();
     salidasE = arregloDin();
+    generarArc();
     printf("\nIniciando proceso de busqueda de caminos\n");
     arrPush(&resolucion, nuevoL.inicio);
     while (resolucion.nElementos != 0) { // Realizar mientras se llegue al mismo punto de salida o se llegue al numero de posibles salidas.
@@ -220,8 +264,8 @@ void resolverL(laberinto nuevoL, int pasos) {
         if (celdaActual.renglon == 0 || celdaActual.columna == 0 || celdaActual.renglon == (nuevoL.renglones) - 1 || celdaActual.columna == (nuevoL.columnas) - 1) {
             if (celdaActual.renglon != nuevoL.inicio.renglon || celdaActual.columna != nuevoL.inicio.columna) { // No registrar la salida si se trata del inicio.
                 if (buscarCelda(&salidasE, celdaActual) == 0) { // Que la salida no este repetida.
-                    // Si se recorre la pila resolucion obtenemos los caminos, falta guardar la pila en un archivo
                     printf("\nSe encontro un camino para la salida %d, %d !!\n", celdaActual.columna, celdaActual.renglon);
+                    aniadirArc(&resolucion);
                     arrPush(&salidasE, celdaActual);
                     if (nuevoL.nSalidas == salidasE.nElementos)
                         break;
@@ -234,9 +278,13 @@ void resolverL(laberinto nuevoL, int pasos) {
                 arrPop(&resolucion);
             }
             arrPush(&resolucion, posibleCelda(nuevoL, celdaActual, &visitadas));
+            if (pasos == 1)
+                simularPaso(nuevoL, &resolucion);
         } else {
             // Paso hacia atras...
             arrPop(&resolucion); // Eliminar movimiento de la pila.
+            if (pasos == 1)
+                simularPaso(nuevoL, &resolucion);
         }
     }
     printf("Se termino el proceso de busqueda.\n");
