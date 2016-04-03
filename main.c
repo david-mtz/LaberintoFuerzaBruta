@@ -22,7 +22,7 @@ int main(int argc, char const *argv[]) {
     pasoxpaso = getchar();
 
     if (pasoxpaso == 's' || pasoxpaso == 'S')
-        resolverL(nuevoL, 1); // Activa la funcion simularPaso, aun no implementada.
+        resolverL(nuevoL, 1); // Activa la funcion simularPaso.
     else
         resolverL(nuevoL, 0); // Modo normal, sin mostrar proceso paso a paso.
 
