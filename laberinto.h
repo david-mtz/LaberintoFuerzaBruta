@@ -43,6 +43,14 @@ void arrPop(pilaD* arrD);
 void arrFree(pilaD* arrD);
 /* Fin arreglo dinamico. */
 
+/* Escritura de Archivo Solucion */
+// Funcion que crea el archivo solucion.
+void generarArc();
+// Funcion que añade soluciones en el archivo.
+void aniadirArc(pilaD* solucion);
+/* FIn de Escritura de Archivo Solucion */
+
+
 /* Laberinto */
 // Funcion para generar la estructura del laberinto.
 laberinto genLab(char const *nombreArc, int iRenglon, int iColumna);
@@ -55,6 +63,8 @@ void freeL(laberinto freeL);
 coord posibleCelda(laberinto nuevoL, coord celdaActual, pilaD* visitada);
 // Funcion que recorre un arreglo dinamico en busca de una coordenada.
 int buscarCelda(pilaD* visitada, coord celdaActual);
+// Funcion que devuelve el estado del recorrido en el laberinto segun la pila de soluciones.
+void simularPaso(laberinto  nuevoL, pilaD* resolucion);
 // Funcion que resuelve el laberinto.
 void resolverL(laberinto nuevoL, int pasos);
 /* Fin Laberinto */
