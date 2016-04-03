@@ -57,7 +57,5 @@ int i, j;
     
 	
     return 0;
-    
-}
 }
 
