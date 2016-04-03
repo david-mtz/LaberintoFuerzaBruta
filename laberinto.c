@@ -201,6 +201,8 @@ int buscarCelda(pilaD* visitada, coord celdaActual) {
 }
 
 // Metodo Backtracking.
+// int pasos, si es = 1 es para llamar a la funcion que simulara los pasos
+// falta implementar paso a paso
 void resolverL(laberinto nuevoL, int pasos) {
     int i;
     pilaD resolucion; // Pila que almacena la solucion de los caminos.
