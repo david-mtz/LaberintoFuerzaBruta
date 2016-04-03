@@ -2,6 +2,38 @@
 /* SOLO FUNCIONES PARA LEER, GUARDAR, MANIPULAR Y RESOLVER EL LABERINTO */
 
 /* aqui empezaremos a generar el laberinto, recibimos el nombre del archivo, la coordenada x, la coordenada y */
+// Camino = 0
+// Paredes = 1
+
+/* Arreglo dinamico, comportamiento como pila */
+pilaD arregloDin() {
+    pilaD arrD;
+    arrD.elementos = NULL;
+    arrD.nElementos = 0;
+    return arrD;
+}
+
+// Agregar al final.
+void arrPush(pilaD* arrD, coord equisye) {
+    arrD->elementos = realloc(arrD->elementos, (int) (arrD->nElementos + 1) * sizeof (coord*));
+    arrD->elementos[arrD->nElementos] = equisye;
+    arrD->nElementos++;
+}
+
+// Eliminar el ultimo elemento.
+
+void arrPop(pilaD* arrD) {
+    arrD->elementos = realloc(arrD->elementos, (arrD->nElementos - 1) * sizeof (coord));
+    arrD->nElementos--;
+}
+
+// Liberar memoria.
+void arrFree(pilaD* arrD) {
+    free(arrD->elementos);
+    arrD->elementos = NULL;
+    arrD->nElementos = 0;
+}
+/* Fin arreglo dinamico */
 /* Laberinto */
 
 /* Generar laberinto */
