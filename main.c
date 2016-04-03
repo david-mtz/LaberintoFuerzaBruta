@@ -5,14 +5,19 @@
 
 /* Recibir argumentos */
 int main(int argc, char const *argv[]) {
-    if (argc < 4 || argc > 4) { // 4 Argumentos [archivo_actual Laberintos/NombreDelLaberinto.txt x y]
-        printf("Introduce los parametros necesarios.\n");
-        printf("Ej.: laberinto.txt 1 1\n");
-        printf("Primer numero es la coordenada  en x (columna) y segundo numero, coordenada en y (renglon).\n");
-        exit(EXIT_FAILURE);
-    }
+	char pasoxpaso;
+	if(argc < 4 || argc >4 ){
+		printf("Introduce los parametros necesarios.\n");
+		printf("Ej.: laberinto.txt 1 1\n");
+		printf("Primer numero, coordenada  en x(columna) y segundo numero, coordenada en y(renglon).\n");
+		exit(EXIT_FAILURE);
+	}
 
-    /* Funciones para trabajar con el laberinto... */
-    
+	laberinto nuevoL;
+
+	nuevoL = genLab(argv[1], atoi(argv[2]), atoi(argv[3]));
+
+	imprimirL(nuevoL);
+	
     return 0;
 }
