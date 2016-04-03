@@ -22,5 +22,25 @@ typedef struct structLab {
 
 } laberinto;
 
+/* Arreglo dinamico, comportamiento como pila. */
+// Funcion que inicializa un arreglo dinamico y devuelve una estructura del mismo.
+pilaD arregloDin();
+// Funcion que agrega un elemento al final del arreglo dinamico.
+void arrPush(pilaD* arrD, coord equisye);
+// Funcion que elimina el ultimo elemento del arreglo dinamico.
+void arrPop(pilaD* arrD);
+// Funcion que libera el arreglo dinamico.
+void arrFree(pilaD* arrD);
+/* Fin arreglo dinamico. */
+
+/* Laberinto */
+// Funcion para generar la estructura del laberinto.
+laberinto genLab(char const *nombreArc, int iRenglon, int iColumna);
+// Funcion que muestra el laberinto.
+void imprimirL(laberinto nuevoL);
+// Funcion que libera las estructuras y datos del laberinto.
+void freeL(laberinto freeL);
+
+
 #endif
 
