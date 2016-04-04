@@ -53,7 +53,7 @@ void aniadirArc(pilaD* solucion);
 
 /* Laberinto */
 // Funcion para generar la estructura del laberinto.
-laberinto genLab(char const *nombreArc, int iRenglon, int iColumna);
+laberinto genLab(char const *nombreArc, int iColumna, int iRenglon);
 // Funcion que muestra el laberinto.
 void imprimirL(laberinto nuevoL);
 // Funcion que libera las estructuras y datos del laberinto.
