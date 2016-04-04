@@ -2,6 +2,8 @@
 
 // Camino = 0
 // Paredes = 1
+// N lineas de longitud = Y = Renglones
+// M numeros separados = X = Columnas
 
 /* Arreglo dinamico, comportamiento como pila */
 pilaD arregloDin() {
@@ -12,6 +14,7 @@ pilaD arregloDin() {
 }
 
 // Agregar al final.
+
 void arrPush(pilaD* arrD, coord equisye) {
     arrD->elementos = realloc(arrD->elementos, (int) (arrD->nElementos + 1) * sizeof (coord*));
     arrD->elementos[arrD->nElementos] = equisye;
@@ -19,7 +22,6 @@ void arrPush(pilaD* arrD, coord equisye) {
 }
 
 // Eliminar el ultimo elemento.
-
 void arrPop(pilaD* arrD) {
     arrD->elementos = realloc(arrD->elementos, (arrD->nElementos - 1) * sizeof (coord));
     arrD->nElementos--;
@@ -111,9 +113,8 @@ laberinto genLab(char const *nombreArc, int iColumna, int iRenglon) {
             i++;
         if (c != 32 && c != 10 && c != 13) { // Mientras no sea un salto de linea o un espacio se guarda en el arreglo.
             labtmp.camino[i][j] = (int) c - 48; // De char a int.
-            if ((i == 0 || j == 0 || i == renglones - 1 || j == columnas - 1) && ((int) c - 48 == 0)) { // Detectar posibles salidas.
+            if ((i == 0 || j == 0 || i == renglones - 1 || j == columnas - 1) && ((int) c - 48 == 0)) // Detectar posibles salidas.
                 labtmp.nSalidas += 1;
-            }
             j++;
             if (j == columnas)
                 j = 0;
@@ -124,7 +125,7 @@ laberinto genLab(char const *nombreArc, int iColumna, int iRenglon) {
     fclose(archivo);
 
     if (labtmp.nSalidas == 0) {
-        printf("El laberinto no tendra solucion, no exise ninguna salida.\n");
+        printf("El laberinto no tendra solucion, no exise ninguna salida. :(\n");
         exit(EXIT_FAILURE);
     }
 
@@ -148,7 +149,7 @@ laberinto genLab(char const *nombreArc, int iColumna, int iRenglon) {
 }
 
 void imprimirL(laberinto nuevoL) {
-    printf("Inicio: x=%i  y=%i\n", nuevoL.inicio.renglon, nuevoL.inicio.columna);
+    printf("Inicio: x=%i  y=%i\n", nuevoL.inicio.columna, nuevoL.inicio.renglon);
     printf("Posibles salidas: %i\n", nuevoL.nSalidas);
     int i, j;
     for (i = 0; i < nuevoL.renglones; i++) {
@@ -175,38 +176,30 @@ coord posibleCelda(laberinto nuevoL, coord celdaActual, pilaD* visitada) {
     // Derecha.
     celdaPosible.renglon = celdaActual.renglon;
     celdaPosible.columna = (celdaActual.columna) + 1;
-    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0)) {
-        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0) {
+    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0))
+        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0)
             return celdaPosible;
-        }
-    }
 
     // Abajo.
     celdaPosible.renglon = (celdaActual.renglon) + 1;
     celdaPosible.columna = celdaActual.columna;
-    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0)) {
-        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0) {
+    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0))
+        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0)
             return celdaPosible;
-        }
-    }
 
     // Arriba.
     celdaPosible.renglon = (celdaActual.renglon) - 1;
     celdaPosible.columna = celdaActual.columna;
-    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0)) {
-        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0) {
+    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0))
+        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0)
             return celdaPosible;
-        }
-    }
 
     // Izquierda.
     celdaPosible.renglon = celdaActual.renglon;
     celdaPosible.columna = (celdaActual.columna) - 1;
-    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0)) {
-        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0) {
+    if (((celdaPosible.renglon < nuevoL.renglones && celdaPosible.renglon >= 0) && (celdaPosible.columna < nuevoL.columnas && celdaPosible.columna >= 0)) && (buscarCelda(visitada, celdaPosible) == 0))
+        if (nuevoL.camino[celdaPosible.renglon][celdaPosible.columna] == 0)
             return celdaPosible;
-        }
-    }
 
     celdaPosible.renglon = -1; // Si no existe ninguna celda.
     celdaPosible.columna = -1;
@@ -234,11 +227,11 @@ void simularPaso(laberinto nuevoL, pilaD* resolucion) {
             paso.columna = j;
             if (nuevoL.camino[i][j] == 0) {
                 if (buscarCelda(resolucion, paso) == 1)
-                    printf("#");
+                    printf("#"); // Para camino recorrido.
                 else
-                    printf(".");
+                    printf("."); // Para camino.
             } else
-                printf("%c", 177);
+                printf("%c", 177); // Para pared.
         }
         printf("\n");
     }
@@ -274,9 +267,6 @@ void resolverL(laberinto nuevoL, int pasos) {
         }
         // Buscar opcion de camino.
         if (posibleCelda(nuevoL, celdaActual, &visitadas).renglon != -1 || posibleCelda(nuevoL, celdaActual, &visitadas).columna != -1) {
-            if (posibleCelda(nuevoL, celdaActual, &visitadas).renglon == nuevoL.inicio.renglon && posibleCelda(nuevoL, celdaActual, &visitadas).columna == nuevoL.inicio.columna) {
-                arrPop(&resolucion);
-            }
             arrPush(&resolucion, posibleCelda(nuevoL, celdaActual, &visitadas));
             if (pasos == 1)
                 simularPaso(nuevoL, &resolucion);
@@ -287,9 +277,9 @@ void resolverL(laberinto nuevoL, int pasos) {
                 simularPaso(nuevoL, &resolucion);
         }
     }
-    printf("Se termino el proceso de busqueda.\n");
+    printf("\nSe termino el proceso de busqueda.\n");
     if (resolucion.nElementos == 0 && visitadas.nElementos > 0 && salidasE.nElementos == 0) { // En caso de que no existe ningun camino posible.
-        printf("No existe ningun camino para alguna de las posibles salidas.");
+        printf("No existe ningun camino para alguna de las posibles salidas. :(\n");
         arrFree(&visitadas);
     } else {
         arrFree(&visitadas); // Liberar memoria.
