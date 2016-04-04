@@ -2,9 +2,8 @@
 
 // Camino = 0
 // Paredes = 1
-// N lineas de longitud = Y = Renglones
-// M numeros separados = X = Columnas
-
+// N lineas de longitud = Y = Renglones.
+// M numeros separados = X = Columnas.
 /* Arreglo dinamico, comportamiento como pila */
 pilaD arregloDin() {
     pilaD arrD;
@@ -62,7 +61,7 @@ void aniadirArc(pilaD* solucion) {
 
 /* Generar laberinto */
 laberinto genLab(char const *nombreArc, int iColumna, int iRenglon) {
-    int renglones = 1, columnas = 0; // Conteo de renglones y columnas.
+    int renglones = 1, columnas = 0, fixColum=0; // Conteo de renglones y columnas.
     int i, j, conteo = 1; // Conteo -> Si ya se contaron las columnas, ya no seguir contandolas || Conteo para las salidas.
     int s; // Conteo de salidas.
     int c; // Lectura de caracter.
@@ -78,14 +77,28 @@ laberinto genLab(char const *nombreArc, int iColumna, int iRenglon) {
     c = fgetc(archivo);
     // Contabilizar columnas y renglones para reservar memoria.
     // c=32 -> espacio en blanco || c=10 & c=13 -> salto de linea
-    while (!feof(archivo)) {
+    while (!feof(archivo)) {     
         if (c != 32 && c != 10 && c != 13 && conteo == 1) // Conteo de caracteres mientras no sean espacios o saltos de linea.
             columnas++;
+
+        if (c != 32 && c != 10 && c != 13) // Conteo de caracteres mientras no sean espacios o saltos de linea.
+            fixColum++;
+
         if (c == 10) { // Conteo de saltos de linea para saber los renglones,
+            if(fixColum != columnas) { // En caso de que no coincida las columnas a lo largo de todo el archivo.
+                printf("Existen errores en tu laberinto, es posible que haya renglones en blanco, falta una o mas columnas.\n %i", renglones);
+                exit(EXIT_FAILURE);
+            }
             renglones++;
             conteo = 0;
+            fixColum = 0;
         }
         c = fgetc(archivo);
+    }
+    // Alertar que hay renglones vacias al final del archivo.
+    if(fixColum != columnas) {
+        printf("Existen errores en tu laberinto, hay renglones en blanco al final de tu archivo.\n %i", renglones);
+        exit(EXIT_FAILURE);
     }
 
     labtmp.camino = (int**) malloc(renglones * sizeof (int*));
